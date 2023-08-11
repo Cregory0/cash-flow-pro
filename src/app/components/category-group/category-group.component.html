@@ -1,0 +1,60 @@
+<ion-list #list>
+	<ion-card *ngFor="let financialGroup of allItems">
+		<ion-item-group>
+			<ion-item-divider color="medium">
+				<ion-label>{{ financialGroup.category }}</ion-label>
+			</ion-item-divider>
+			<ion-item-sliding *ngFor="let financialItem of financialGroup.items">
+				<ion-item *ngIf="selectedItem !== financialItem" (dblclick)="editItem(financialItem)">
+					<p>{{ financialItem.name }}</p>
+					<ion-label slot="end">£{{ financialItem.price }}</ion-label>
+				</ion-item>
+
+				<ion-item color="primary" *ngIf="selectedItem === financialItem" (dblclick)="stopEdit(financialGroup)">
+					<ion-input [(ngModel)]="selectedItem.name" [value]="selectedItem.name"
+						(keyup.enter)="stopEdit(financialGroup)"></ion-input>
+					<ion-input slot="end" placeholder="1" inputmode="numeric" type="number"
+						(keyup.enter)="stopEdit(financialGroup)" [(ngModel)]="selectedItem.price"
+						[value]="selectedItem.price"></ion-input>
+				</ion-item>
+
+				<ion-item-options>
+					<ion-item-option color="danger"
+						(click)="deleteItem(financialItem, financialGroup)">Delete</ion-item-option>
+					<ion-item-option color="success" (click)="editItem(financialItem)">Edit</ion-item-option>
+				</ion-item-options>
+			</ion-item-sliding>
+
+			<ion-item-sliding *ngIf="financialGroup.isNewItem">
+				<ion-item>
+					<ion-input (keyup.enter)="addItem(financialGroup)" label="Name" labelPlacement="stacked"
+						placeholder="Name" [(ngModel)]="nameValue" [value]="nameValue"></ion-input>
+					<ion-input (keyup.enter)="addItem(financialGroup)" label="£" slot="end" placeholder="100"
+						inputmode="numeric" type="number" [(ngModel)]="priceValue" [value]="priceValue"></ion-input>
+				</ion-item>
+
+				<ion-item-options>
+					<ion-item-option color="danger">Delete</ion-item-option>
+				</ion-item-options>
+				<div style="display: flex; flex-grow: 1">
+					<ion-button style="flex-grow: 1" color="success" (click)="addItem(financialGroup)"
+						expand="full">Add</ion-button>
+					<ion-button style="flex-grow: 1" color="danger" (click)="closeItem(financialGroup)"
+						expand="full">Cancel</ion-button>
+				</div>
+			</ion-item-sliding>
+
+			<div style="display: flex" *ngIf="!financialGroup.isNewItem">
+				<ion-button (click)="newItem(financialGroup)" style="flex-grow: 1">Add item</ion-button>
+				<ion-button (click)="deleteCategory(financialGroup, allItems)" color="danger"
+					style="flex-grow: 1">Delete Group</ion-button>
+			</div>
+			<ion-item-divider color="light">
+				<ion-label>Total: £</ion-label>
+				<ion-label>{{
+					financialGroup.totalAmount.toFixed(2)
+					}}</ion-label>
+			</ion-item-divider>
+		</ion-item-group>
+	</ion-card>
+</ion-list>

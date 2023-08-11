@@ -1,0 +1,18 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title> Money Out </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+    <app-modal
+        [newCategory]="this.newCategory"
+        [allItems]="allOutcome"
+        [modalId]="modalId"
+        [storageId]="this.storageId"
+    ></app-modal>
+    <app-category-group
+        [storageId]="this.storageId"
+        [allItems]="allOutcome"
+    ></app-category-group>
+</ion-content>
+<app-total-bar [storageId]="'allOutcome'"></app-total-bar>
